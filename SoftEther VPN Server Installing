@@ -1,0 +1,86 @@
+sudo apt update && sudo apt upgrade
+
+wget https://www.softether-download.com/files/softether/v4.34-9745-rtm-2020.04.05-tree/Linux/SoftEther_VPN_Server/32bit_-_ARM_EABI/softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-arm_eabi-32bit.tar.gz
+tar xzf softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-arm_eabi-32bit.tar.gz && rm softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-arm_eabi-32bit.tar.gz
+
+cd vpnserver
+sudo make
+cd ../
+sudo mv vpnserver /usr/local
+cd /usr/local/vpnserver/
+sudo chmod 600 *
+sudo chmod 700 vpnserver vpncmd
+
+sudo ./vpnserver start
+sudo ./vpncmd
+ServerPasswordSet
+
+sudo nano /etc/init.d/vpnserver
+#Copy below scripts
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:                     vpnserver
+# Required-Start:               $local_fs $network
+# Required-Stop:                $local_fs $network
+# Default-Start:                2 3 4 5
+# Default-Stop:                 0 1 6
+# Short-Description:            SoftEther VPN 1.0 RC2
+# Description:                  Start vpnserver daemon SoftEther VPN 1.0 Server
+### END INIT INFO
+
+DAEMON=/usr/local/vpnserver/vpnserver
+LOCK=/var/lock/vpnserver
+
+. /lib/lsb/init-functions
+
+test -x $DAEMON || exit 0
+
+case "$1" in
+start)
+sleep 3
+log_daemon_msg "Starting SoftEther VPN 1.0 Server" "vpnserver"
+$DAEMON start >/dev/null 2>&1
+touch $LOCK
+log_end_msg 0
+sleep 3
+
+;;
+
+stop)
+log_daemon_msg "Stopping SoftEther VPN 1.0 Server" "vpnserver"
+$DAEMON stop >/dev/null 2>&1
+rm $LOCK
+log_end_msg 0
+sleep 2
+
+;;
+
+restart)
+$DAEMON stop
+sleep 2
+
+$DAEMON start
+sleep 5
+
+;;
+
+status)
+    if [ -e $LOCK ]
+    then
+        echo "vpnserver is running."
+    else
+        echo "vpnserver is not running."
+    fi
+;;
+*)
+
+echo "Usage: $0 {start|stop|restart|status}"
+exit 1
+esac
+exit 0
+#End of file
+
+sudo chmod 755 /etc/init.d/vpnserver
+sudo update-rc.d vpnserver defaults
+
+systemctl enable vpnserver
