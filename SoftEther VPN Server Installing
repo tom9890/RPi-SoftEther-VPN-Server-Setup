@@ -1,7 +1,7 @@
 sudo apt update && sudo apt upgrade
 
-wget https://www.softether-download.com/files/softether/v4.34-9745-rtm-2020.04.05-tree/Linux/SoftEther_VPN_Server/32bit_-_ARM_EABI/softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-arm_eabi-32bit.tar.gz
-tar xzf softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-arm_eabi-32bit.tar.gz && rm softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-arm_eabi-32bit.tar.gz
+wget http://www.softether-download.com/files/softether/v4.38-9760-rtm-2021.08.17-tree/Linux/SoftEther_VPN_Server/32bit_-_ARM_EABI/softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-arm_eabi-32bit.tar.gz
+tar xzf softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-arm_eabi-32bit.tar.gz && rm softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-arm_eabi-32bit.tar.gz
 
 cd vpnserver
 sudo make
